@@ -1,0 +1,20 @@
+<Window x:Class="LearnOnMe.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:LearnOnMe.App.ViewModels"
+        xmlns:views="clr-namespace:LearnOnMe.App.Views"
+        Title="LearnOnMe"
+        Width="1100" Height="720" MinWidth="640" MinHeight="420"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource AppWindowStyle}">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SubjectViewModel}">
+            <views:SubjectView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <ContentControl Content="{Binding CurrentPage}" Focusable="False" />
+</Window>

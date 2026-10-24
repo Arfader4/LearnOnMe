@@ -1,0 +1,28 @@
+<UserControl x:Class="LearnOnMe.App.Views.SubjectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="24,20,32,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{StaticResource GhostButton}" Command="{Binding BackCommand}"
+                    ToolTip="Wróć do przedmiotów (Esc)" AutomationProperties.Name="Wróć do przedmiotów">
+                <TextBlock Text="&#xE72B;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="16" />
+            </Button>
+            <Border Width="4" Height="28" Margin="12,0,12,0" CornerRadius="2"
+                    Background="{Binding Tile.AccentBrush}" />
+            <TextBlock Text="{Binding Tile.Name}" Style="{StaticResource PageTitleText}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Margin="8,24,0,0" Style="{StaticResource SecondaryText}"
+                   Text="Tu pojawią się przypinki (foldery, pliki, aplikacje, linki) i zakładka Nauka." />
+    </Grid>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding BackCommand}" />
+    </UserControl.InputBindings>
+</UserControl>
