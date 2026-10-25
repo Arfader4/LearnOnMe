@@ -77,4 +77,13 @@ public sealed class PinTargetsTests
         Assert.Equal(exe, info.FileName);
         Assert.Equal(Path.GetDirectoryName(exe), info.WorkingDirectory);
     }
+
+    [Theory]
+    [InlineData("drive.google.com/drive/folders/abc", true)]
+    [InlineData("https://teams.microsoft.com/l/team/x", true)]
+    [InlineData("http://192.168.1.1", true)]
+    [InlineData("mailto:prowadzacy@uczelnia.pl", false)]
+    [InlineData("ms-teams://l/team/x", false)]
+    public void IsWebLink_OnlyHttpAndHttpsOpenInsideTheApp(string link, bool expected) =>
+        Assert.Equal(expected, PinTargets.IsWebLink(link));
 }

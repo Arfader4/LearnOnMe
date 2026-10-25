@@ -1,0 +1,12 @@
+<UserControl x:Class="LearnOnMe.App.Views.WebViewMissingPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Shown in place of WebView2 when the Edge WebView2 Runtime is not installed. -->
+    <StackPanel Margin="24" MaxWidth="480" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <TextBlock Text="Brakuje składnika WebView2" FontSize="18" FontWeight="SemiBold" />
+        <TextBlock Margin="0,6,0,16" Style="{StaticResource SecondaryText}" TextWrapping="Wrap"
+                   Text="LearnOnMe wyświetla strony i quizy przez Microsoft Edge WebView2 Runtime. Zwykle jest już w Windows 10 i 11, ale na tym komputerze go nie ma. Zainstaluj go i uruchom aplikację ponownie." />
+        <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Click="Download_Click"
+                Content="Pobierz WebView2 Runtime" />
+    </StackPanel>
+</UserControl>

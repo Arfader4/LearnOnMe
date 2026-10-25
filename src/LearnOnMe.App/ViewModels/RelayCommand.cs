@@ -6,6 +6,8 @@ public sealed class RelayCommand(Action<object?> execute, Func<object?, bool>? c
 {
     public RelayCommand(Action execute) : this(_ => execute()) { }
 
+    public RelayCommand(Action execute, Func<bool> canExecute) : this(_ => execute(), _ => canExecute()) { }
+
     public event EventHandler? CanExecuteChanged
     {
         add => CommandManager.RequerySuggested += value;

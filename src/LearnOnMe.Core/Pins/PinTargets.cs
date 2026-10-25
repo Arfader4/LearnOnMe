@@ -72,6 +72,11 @@ public static class PinTargets
         };
     }
 
+    /// <summary>http(s) links open in the app's own browser tab; mailto: and other schemes go to Windows.</summary>
+    public static bool IsWebLink(string link) =>
+        Uri.TryCreate(NormalizeLink(link), UriKind.Absolute, out var uri) &&
+        (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+
     /// <summary>Shell-executes the target, which is what double-clicking it in Explorer would do.</summary>
     public static ProcessStartInfo CreateStartInfo(Pin pin)
     {
@@ -88,5 +93,11 @@ public static class PinTargets
     public static void Open(Pin pin)
     {
         using var _ = Process.Start(CreateStartInfo(pin));
+    }
+
+    /// <summary>Opens a path or URL the way Explorer would: a folder in Explorer, a file in its default program.</summary>
+    public static void ShellOpen(string target)
+    {
+        using var _ = Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
     }
 }

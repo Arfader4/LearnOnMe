@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Przykładowy quiz: SQL</title>
+<style>
+  :root { color-scheme: dark; --bg: #121418; --card: #1b1e24; --line: #2c313b; --text: #e8eaed; --muted: #9aa0aa; --ok: #4caf50; --bad: #ef5350; --accent: #4f8cff; }
+  body { margin: 0; padding: 32px; background: var(--bg); color: var(--text); font: 15px/1.5 "Segoe UI", sans-serif; }
+  main { max-width: 640px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  p.muted { color: var(--muted); margin: 0 0 24px; }
+  .q { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+  .q h2 { font-size: 15px; margin: 0 0 10px; }
+  button.opt { display: block; width: 100%; text-align: left; margin: 6px 0 0; padding: 8px 12px; border-radius: 6px;
+               border: 1px solid var(--line); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+  button.opt:hover:not(:disabled) { border-color: var(--accent); }
+  button.ok { border-color: var(--ok); background: #4caf5022; }
+  button.bad { border-color: var(--bad); background: #ef535022; }
+  #score { margin-top: 16px; color: var(--muted); }
+  #again { margin-top: 12px; padding: 8px 16px; border: 0; border-radius: 6px; background: var(--accent); color: white; font: inherit; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Przykładowy quiz: SQL</h1>
+  <p class="muted">Wrzuć własne pliki .html do przypiętego folderu przedmiotu, a pojawią się w zakładce Nauka. Najlepszy wynik zapisuje się w localStorage.</p>
+  <div id="quiz"></div>
+  <div id="score"></div>
+  <button id="again" onclick="render()">Jeszcze raz</button>
+</main>
+<script>
+const questions = [
+  { q: "Która klauzula filtruje grupy po GROUP BY?", a: ["WHERE", "HAVING", "ORDER BY", "LIMIT"], ok: 1 },
+  { q: "Który JOIN zwraca wszystkie wiersze z lewej tabeli?", a: ["INNER JOIN", "CROSS JOIN", "LEFT JOIN", "RIGHT JOIN"], ok: 2 },
+  { q: "Postać normalna, która usuwa zależności częściowe od klucza:", a: ["1NF", "2NF", "3NF", "BCNF"], ok: 1 },
+];
+const key = "quiz-przyklad-best";
+let points = 0, answered = 0;
+
+function render() {
+  points = 0; answered = 0;
+  const box = document.getElementById("quiz");
+  box.innerHTML = "";
+  questions.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "q";
+    div.innerHTML = `<h2>${item.q}</h2>`;
+    item.a.forEach((text, i) => {
+      const b = document.createElement("button");
+      b.className = "opt";
+      b.textContent = text;
+      b.onclick = () => {
+        div.querySelectorAll("button").forEach((x) => (x.disabled = true));
+        b.classList.add(i === item.ok ? "ok" : "bad");
+        div.querySelectorAll("button")[item.ok].classList.add("ok");
+        if (i === item.ok) points++;
+        if (++answered === questions.length) finish();
+      };
+      div.appendChild(b);
+    });
+    box.appendChild(div);
+  });
+  showBest();
+}
+
+function finish() {
+  const best = Math.max(points, Number(localStorage.getItem(key) || 0));
+  localStorage.setItem(key, best);
+  showBest(`Wynik: ${points}/${questions.length}. `);
+}
+
+function showBest(prefix = "") {
+  const best = localStorage.getItem(key);
+  document.getElementById("score").textContent = prefix + (best ? `Najlepszy wynik: ${best}/${questions.length}` : "");
+}
+
+render();
+</script>
+</body>
+</html>
