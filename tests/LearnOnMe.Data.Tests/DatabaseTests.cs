@@ -74,6 +74,27 @@ public sealed class DatabaseTests : IDisposable
     }
 
     [Fact]
+    public void Pins_CrudRoundTrip()
+    {
+        var pins = new PinRepository(_db);
+        var subjectId = new SubjectRepository(_db).GetAll()[0].Id;
+        var pin = new Pin { SubjectId = subjectId, Type = PinType.App, Title = "SSMS", Target = @"C:\SSMS\Ssms.exe" };
+        pins.Add(pin);
+
+        pin.Title = "SQL Server Management Studio";
+        pin.Type = PinType.Link;
+        pin.Target = "https://learn.microsoft.com/sql/ssms";
+        pins.Update(pin);
+        var loaded = Assert.Single(pins.GetForSubject(subjectId));
+        Assert.Equal("SQL Server Management Studio", loaded.Title);
+        Assert.Equal(PinType.Link, loaded.Type);
+        Assert.Equal("https://learn.microsoft.com/sql/ssms", loaded.Target);
+
+        pins.Delete(pin.Id);
+        Assert.Empty(pins.GetForSubject(subjectId));
+    }
+
+    [Fact]
     public void Settings_UpsertAndRead()
     {
         var settings = new SettingsRepository(_db);
