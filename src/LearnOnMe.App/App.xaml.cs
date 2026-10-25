@@ -1,4 +1,5 @@
 using System.Windows;
+using LearnOnMe.App.Services;
 using LearnOnMe.App.ViewModels;
 using LearnOnMe.Data;
 
@@ -13,7 +14,7 @@ public partial class App : Application
         var db = new LearnOnMeDatabase(LearnOnMeDatabase.DefaultPath());
         db.Initialize();
 
-        var main = new MainViewModel(new SubjectRepository(db));
+        var main = new MainViewModel(new SubjectRepository(db), new PinRepository(db), new DialogService());
         main.Load();
 
         MainWindow = new MainWindow { DataContext = main };
