@@ -1,5 +1,6 @@
 using LearnOnMe.Core.Models;
 using LearnOnMe.Core.Pins;
+using LearnOnMe.Core.Study;
 
 namespace LearnOnMe.App.ViewModels;
 
@@ -32,6 +33,17 @@ public sealed class PinViewModel(Pin pin)
         PinType.App => "",
         _ => "",
     };
+
+    /// <summary>Context-menu label for opening outside the app, or null when the pin already opens in Windows.</summary>
+    public string? OpenExternallyLabel => Pin.Type switch
+    {
+        PinType.Folder => "Otwórz w Eksploratorze",
+        PinType.Link when PinTargets.IsWebLink(Pin.Target) => "Otwórz w przeglądarce systemowej",
+        PinType.File when StudyFiles.IsHtml(Pin.Target) => "Otwórz w domyślnej przeglądarce",
+        _ => null,
+    };
+
+    public bool HasExternalOpen => OpenExternallyLabel is not null;
 
     /// <summary>Checked once when the card loads, so a moved folder shows a warning instead of failing silently.</summary>
     public bool IsMissing { get; } = !PinTargets.Exists(pin.Type, pin.Target);
